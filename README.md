@@ -1,4 +1,4 @@
-# Send Demurrage – Rails 7 API
+# Send Demurrage Service
 
 Modernised service for demurrage billing and overdue-invoice tracking built on top of a legacy shipping schema.
 
@@ -36,9 +36,7 @@ All you need is **Docker Desktop** (or engine) + **Docker Compose v2+**.
 
 Run the stack:
 ```bash
-# build images & start in foreground
-docker compose up --build
-# or, detached mode (recommended)
+# detached mode (recommended)
 docker compose up -d --build   # <- keeps terminal free
 ```
 It brings up two services:
@@ -97,16 +95,13 @@ RAILS_ENV=test bin/rails db:create db:migrate
 ```
 
 ```bash
-bundle exec rspec        # 44 examples, 0 failures
+bundle exec rspec    
 ```
 SimpleCov is enabled; run specs to see coverage in `coverage/`.
 
 ## 🤔 Design Decisions & Assumptions
 * **Modular migrations** – each logical database change lives in its own migration so it can be rolled back or re-run in isolation.
-* **Schema hardening & constraints** – the legacy dump had no foreign keys and many nullable fields. Some database-level safety nets were added:
-  • FKs (`fk_invoices_on_bill_of_lading_number`, `fk_bill_of_ladings_on_customer_id`, …)
-  • unique indexes (`index_invoices_on_reference`, `index_bill_of_ladings_on_number`)
-  • NOT-NULL constraints on business-critical columns (`reference`, `amount`, `due_date`, …).
+* **Schema hardening & constraints** – the legacy dump had no foreign keys and many nullable fields. Some database-level safety nets were added to improve perfomance and safety.
   These let the DB, not the app code, guarantee referential integrity.
 * **Automatic timestamps** – `created_at`/`updated_at` were added to *all* business tables (BLs, invoices, customers, refund_requests).  They provide an audit trail and can help power future analytics.
 * **Back-filling `due_date`** – legacy invoices never recorded a due date.  Because `created_at` was already present **and non-null**, it was deterministically restored: `due_date = created_at + 15 days`.
