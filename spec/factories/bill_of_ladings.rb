@@ -8,12 +8,13 @@ FactoryBot.define do
     free_time_days { rand(5..14) }
     statut { 'active' }
 
-    containers_20ft_dry_count     { rand(0..3) }
-    containers_40ft_dry_count     { rand(0..3) }
-    containers_20ft_reefer_count  { rand(0..2) }
-    containers_40ft_reefer_count  { rand(0..2) }
-    containers_20ft_special_count { rand(0..1) }
-    containers_40ft_special_count { rand(0..1) }
+    # Default container counts set to 0 to ensure deterministic behavior in tests.
+    containers_20ft_dry_count     { 0 }
+    containers_40ft_dry_count     { 0 }
+    containers_20ft_reefer_count  { 0 }
+    containers_40ft_reefer_count  { 0 }
+    containers_20ft_special_count { 0 }
+    containers_40ft_special_count { 0 }
 
     trait :overdue do
       arrival_date { Date.current - free_time_days.days - 1.day }
