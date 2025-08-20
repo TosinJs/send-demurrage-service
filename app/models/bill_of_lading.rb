@@ -1,6 +1,6 @@
 class BillOfLading < ApplicationRecord
   belongs_to :customer, inverse_of: :bill_of_ladings
-  has_many :invoices, foreign_key: :bill_of_lading_number, inverse_of: :bill_of_lading
+  has_many :invoices, primary_key: :number, foreign_key: :bill_of_lading_number, inverse_of: :bill_of_lading
 
   CONTAINER_COLUMNS = %i[
     containers_20ft_dry_count
@@ -11,7 +11,7 @@ class BillOfLading < ApplicationRecord
     containers_40ft_special_count
   ].freeze
 
-  scope :overdue_today, -> { 
+  scope :overdue_today, -> {
     where("DATE(arrival_date) + INTERVAL free_time_days DAY <= ?", Date.current)
       .where.not(free_time_days: nil)
   }

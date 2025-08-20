@@ -14,5 +14,9 @@ FactoryBot.define do
     containers_40ft_reefer_count  { rand(0..2) }
     containers_20ft_special_count { rand(0..1) }
     containers_40ft_special_count { rand(0..1) }
+
+    trait :overdue do
+      arrival_date { Date.current - free_time_days.days - 1.day }
+    end
   end
 end

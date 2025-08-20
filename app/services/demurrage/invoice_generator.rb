@@ -16,8 +16,13 @@ module Demurrage
           next
         end
 
-        invoice = create_invoice_for(bill_of_lading)
-        created_invoices << invoice if invoice.present?
+        begin
+          invoice = create_invoice_for(bill_of_lading)
+          created_invoices << invoice if invoice.present?
+        rescue StandardError => e
+          Rails.logger.error "Failed to create invoice for BL ##{bill_of_lading.number}: #{e.message}"
+          next
+        end
       end
 
       created_invoices

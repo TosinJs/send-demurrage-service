@@ -9,12 +9,12 @@ RSpec.describe Customer, type: :model do
 
   describe 'validations' do
     it { is_expected.to validate_presence_of(:name) }
-    
+
     it 'validates uniqueness of code when present' do
       create(:customer, code: 'UNIQUE123')
       expect(build(:customer, code: 'UNIQUE123')).to validate_uniqueness_of(:code).case_insensitive
     end
-    
+
     it { is_expected.to allow_value(nil).for(:code) }
   end
 end
