@@ -18,8 +18,8 @@ Modernised service for demurrage billing and overdue-invoice tracking built on t
 ## ⚡ Setup
 ```bash
 # clone & install deps
-git clone <repo>
-cd send_demurrage
+git clone https://github.com/TosinJs/send-demurrage-service.gitrepo>
+cd send-demurrage-service
 bundle install
 
 # data
@@ -102,7 +102,6 @@ SimpleCov is enabled; run specs to see coverage in `coverage/`.
 ## 🤔 Design Decisions & Assumptions
 * **Modular migrations** – each logical database change lives in its own migration so it can be rolled back or re-run in isolation.
 * **Schema hardening & constraints** – the legacy dump had no foreign keys and many nullable fields. Some database-level safety nets were added to improve perfomance and safety.
-  These let the DB, not the app code, guarantee referential integrity.
 * **Automatic timestamps** – `created_at`/`updated_at` were added to *all* business tables (BLs, invoices, customers, refund_requests).  They provide an audit trail and can help power future analytics.
 * **Back-filling `due_date`** – legacy invoices never recorded a due date.  Because `created_at` was already present **and non-null**, it was deterministically restored: `due_date = created_at + 15 days`.
 * **Duplicate protection** – an invoice is considered *open* if its `status` is one of (`open`, `init`, `pending`).  When generating new invoices the service skips BLs that already have an open invoice, providing idempotency and preventing double billing.
