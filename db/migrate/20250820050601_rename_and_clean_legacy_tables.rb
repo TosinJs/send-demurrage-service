@@ -28,7 +28,7 @@ class RenameAndCleanLegacyTables < ActiveRecord::Migration[7.2]
     change_table :customers do |t|
       t.rename :id_client,  :id
       t.rename :nom,        :name
-      t.rename :code_client,:code
+      t.rename :code_client, :code
     end
 
     # invoices
