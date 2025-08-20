@@ -10,52 +10,65 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_08_20_034719) do
-  create_table "bl", primary_key: "id_bl", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+ActiveRecord::Schema[7.2].define(version: 2025_08_20_052400) do
+  create_table "bill_of_ladings", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "id_upload"
     t.datetime "date_upload"
-    t.string "numero_bl", limit: 9, null: false
-    t.bigint "id_client"
+    t.string "number", limit: 9, null: false
+    t.bigint "customer_id"
     t.string "arrival_date"
-    t.integer "freetime"
-    t.integer "nbre_20pieds_sec"
-    t.integer "nbre_40pieds_sec"
-    t.integer "nbre_20pieds_frigo"
-    t.integer "nbre_40pieds_frigo"
-    t.integer "nbre_20pieds_special"
-    t.integer "nbre_40pieds_special"
+    t.integer "free_time_days"
+    t.integer "containers_20ft_dry_count"
+    t.integer "containers_40ft_dry_count"
+    t.integer "containers_20ft_reefer_count"
+    t.integer "containers_40ft_reefer_count"
+    t.integer "containers_20ft_special_count"
+    t.integer "containers_40ft_special_count"
     t.string "statut"
-    t.index ["arrival_date"], name: "index_bl_on_arrival_date"
-    t.index ["numero_bl"], name: "index_bl_on_numero_bl"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["arrival_date"], name: "index_bill_of_ladings_on_arrival_date"
+    t.index ["customer_id"], name: "index_bill_of_ladings_on_customer_id"
+    t.index ["number"], name: "index_bill_of_ladings_on_number", unique: true
   end
 
-  create_table "client", primary_key: "id_client", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "nom", limit: 60, null: false
+  create_table "customers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name", limit: 60, null: false
     t.string "statut"
-    t.string "code_client", limit: 20
+    t.string "code", limit: 20
     t.string "nom_groupe", limit: 150
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "facture", primary_key: "id_facture", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "invoices", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "reference", limit: 10, null: false
-    t.string "numero_bl", limit: 9, null: false
+    t.string "bill_of_lading_number", limit: 9, null: false
     t.string "code_client", limit: 20, null: false
     t.string "nom_client", limit: 60, null: false
-    t.decimal "montant_facture", precision: 12, null: false
+    t.decimal "amount", precision: 12, null: false
     t.decimal "montant_orig", precision: 12
-    t.string "devise", limit: 6, default: "XOF"
-    t.string "statut", limit: 10, default: "init", null: false
-    t.datetime "date_facture", null: false
+    t.string "currency", limit: 6, default: "XOF"
+    t.string "status", limit: 10, default: "init", null: false
+    t.datetime "invoiced_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at"
-    t.index ["reference"], name: "index_facture_on_reference", unique: true
+    t.date "due_date", null: false
+    t.index ["bill_of_lading_number"], name: "index_invoices_on_bill_of_lading_number"
+    t.index ["reference"], name: "index_invoices_on_reference", unique: true
   end
 
-  create_table "remboursement", primary_key: "id_remboursement", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "numero_bl", limit: 9, null: false
-    t.string "montant_demande", limit: 15
-    t.string "statut", limit: 10, default: "PENDING"
+  create_table "refund_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "bill_of_lading_number", limit: 9, null: false
+    t.string "requested_amount", limit: 15
+    t.string "status", limit: 10, default: "PENDING"
     t.datetime "date_demande"
-    t.index ["numero_bl"], name: "index_remboursement_on_numero_bl"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["bill_of_lading_number"], name: "index_refund_requests_on_bill_of_lading_number"
   end
+
+  add_foreign_key "bill_of_ladings", "customers", name: "fk_bill_of_ladings_on_customer_id"
+  add_foreign_key "invoices", "bill_of_ladings", column: "bill_of_lading_number", primary_key: "number", name: "fk_invoices_on_bill_of_lading_number"
+  add_foreign_key "refund_requests", "bill_of_ladings", column: "bill_of_lading_number", primary_key: "number", name: "fk_refund_requests_on_bill_of_lading_number"
 end
