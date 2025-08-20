@@ -11,7 +11,10 @@ class BillOfLading < ApplicationRecord
     containers_40ft_special_count
   ].freeze
 
-  scope :overdue_today, -> { where("arrival_date + free_time_days <= ?", Date.current) }
+  scope :overdue_today, -> { 
+    where("DATE(arrival_date) + INTERVAL free_time_days DAY <= ?", Date.current)
+      .where.not(free_time_days: nil)
+  }
 
   # --- Validations ---
   validates :number, presence: true, uniqueness: true

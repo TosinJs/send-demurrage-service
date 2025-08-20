@@ -44,10 +44,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_20_052400) do
   create_table "invoices", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "reference", limit: 10, null: false
     t.string "bill_of_lading_number", limit: 9, null: false
-    t.string "code_client", limit: 20, null: false
-    t.string "nom_client", limit: 60, null: false
     t.decimal "amount", precision: 12, null: false
-    t.decimal "montant_orig", precision: 12
     t.string "currency", limit: 6, default: "XOF"
     t.string "status", limit: 10, default: "init", null: false
     t.datetime "invoiced_at", null: false

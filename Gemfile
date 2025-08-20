@@ -6,8 +6,6 @@ gem "rails", "~> 7.2.2", ">= 7.2.2.2"
 gem "mysql2", "~> 0.5"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
-# Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem "jbuilder"
 # JSON serializers
 gem "active_model_serializers", "~> 0.10"
 # Use Redis adapter to run Action Cable in production
@@ -48,4 +46,5 @@ group :development, :test do
   gem "rubocop-rails", require: false
   gem "simplecov", require: false
   gem "annotate"
+  gem "shoulda-matchers"
 end

@@ -38,10 +38,7 @@ class ImportLegacySchema < ActiveRecord::Migration[7.2]
     create_table :facture, primary_key: :id_facture, id: :bigint do |t|
       t.string   :reference, limit: 10, null: false
       t.string   :numero_bl, limit: 9, null: false
-      t.string   :code_client, limit: 20, null: false
-      t.string   :nom_client, limit: 60, null: false
       t.decimal  :montant_facture, precision: 12, scale: 0, null: false
-      t.decimal  :montant_orig, precision: 12, scale: 0
       t.string   :devise, limit: 6, default: 'XOF'
       t.string   :statut, limit: 10, null: false, default: 'init'
       t.datetime :date_facture, null: false
