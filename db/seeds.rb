@@ -66,8 +66,8 @@ ActiveRecord::Base.transaction do
     # Roughly half the invoices should already be overdue so that
     # GET /invoices/overdue always returns data.
     overdue = rand < 0.5
-    invoiced_at_time = overdue ? rand(20..40).days.ago : Time.current
-    due_date_value   = overdue ? rand(5..15).days.ago.to_date : (invoiced_at_time.to_date + 15.days)
+    created_at = overdue ? rand(20..40).days.ago : Time.current
+    due_date_value   = overdue ? rand(5..15).days.ago.to_date : (created_at.to_date + 15.days)
     status_value     = overdue ? 'open' : %w[paid cancelled].sample
 
     Invoice.find_or_create_by!(reference: reference) do |inv|
@@ -75,7 +75,7 @@ ActiveRecord::Base.transaction do
       inv.bill_of_lading_number  = bl.number
       inv.amount                = amount
       inv.currency              = 'USD'
-      inv.invoiced_at           = invoiced_at_time
+      inv.created_at            = created_at
       inv.due_date              = due_date_value
       inv.status                = status_value
     end

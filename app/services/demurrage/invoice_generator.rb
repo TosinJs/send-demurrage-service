@@ -11,8 +11,8 @@ module Demurrage
       created_invoices = []
 
       BillOfLading.overdue_today.find_each do |bill_of_lading|
-        if bill_of_lading.invoices.where.not(status: "paid").exists?
-          Rails.logger.info "Skipping BL ##{bill_of_lading.number}: unpaid invoice already exists"
+        if bill_of_lading.invoices.where(status: Invoice::OPEN_STATUSES).exists?
+          Rails.logger.info "Skipping BL ##{bill_of_lading.number}: open invoice already exists"
           next
         end
 
@@ -40,7 +40,6 @@ module Demurrage
         currency: CURRENCY,
         due_date: Time.current.to_date + INVOICE_DUE_DAYS.days,
         status: "open",
-        invoiced_at: Time.current
       )
 
       Rails.logger.info "Created Invoice ##{invoice.reference} for BL ##{bill_of_lading.number} (#{bill_of_lading.containers_total} containers, $#{amount})"

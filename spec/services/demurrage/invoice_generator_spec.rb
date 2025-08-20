@@ -18,7 +18,7 @@ RSpec.describe Demurrage::InvoiceGenerator do
     end
 
     context 'when bills are overdue' do
-      let!(:overdue_bill) { create(:bill_of_lading, :overdue, containers_20ft_dry_count: 2, containers_40ft_dry_count: 1) }
+      let!(:overdue_bill) { create(:bill_of_lading, :overdue_today, containers_20ft_dry_count: 2, containers_40ft_dry_count: 1) }
 
       it 'creates an invoice for each overdue bill without unpaid invoices' do
         expect { described_class.run }.to change(Invoice, :count).by(1)
@@ -53,8 +53,8 @@ RSpec.describe Demurrage::InvoiceGenerator do
     end
 
     context 'when multiple bills are overdue' do
-      let!(:overdue_bill) { create(:bill_of_lading, :overdue, containers_20ft_dry_count: 2, containers_40ft_dry_count: 1) }
-      let!(:another_overdue_bill) { create(:bill_of_lading, :overdue, containers_20ft_reefer_count: 1) }
+      let!(:overdue_bill) { create(:bill_of_lading, :overdue_today, containers_20ft_dry_count: 2, containers_40ft_dry_count: 1) }
+      let!(:another_overdue_bill) { create(:bill_of_lading, :overdue_today, containers_20ft_reefer_count: 1) }
 
       it 'creates invoices for all overdue bills' do
         expect { described_class.run }.to change(Invoice, :count).by(2)
@@ -67,7 +67,7 @@ RSpec.describe Demurrage::InvoiceGenerator do
     end
 
     context 'when an error occurs during invoice creation' do
-      let!(:overdue_bill) { create(:bill_of_lading, :overdue, containers_20ft_dry_count: 2, containers_40ft_dry_count: 1) }
+      let!(:overdue_bill) { create(:bill_of_lading, :overdue_today, containers_20ft_dry_count: 2, containers_40ft_dry_count: 1) }
 
       before do
         allow(Invoice).to receive(:create!).and_raise(ActiveRecord::RecordInvalid)
@@ -92,7 +92,6 @@ RSpec.describe Demurrage::InvoiceGenerator do
           expect(invoice.currency).to eq(described_class::CURRENCY)
           expect(invoice.status).to eq('open')
           expect(invoice.due_date).to be_present
-          expect(invoice.invoiced_at).to be_present
           expect(invoice.reference).to be_present
         end
       end

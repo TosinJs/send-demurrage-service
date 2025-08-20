@@ -38,7 +38,6 @@ class RenameAndCleanLegacyTables < ActiveRecord::Migration[7.2]
       t.rename :montant_facture,  :amount
       t.rename :devise,           :currency
       t.rename :statut,           :status
-      t.rename :date_facture,     :invoiced_at
     end
 
     # refund_requests

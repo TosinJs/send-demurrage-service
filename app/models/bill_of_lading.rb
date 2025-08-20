@@ -12,7 +12,7 @@ class BillOfLading < ApplicationRecord
   ].freeze
 
   scope :overdue_today, -> {
-    where("DATE(arrival_date) + INTERVAL free_time_days DAY <= ?", Date.current)
+    where("DATE(arrival_date) + INTERVAL free_time_days DAY = ?", Date.current)
       .where.not(free_time_days: nil)
   }
 

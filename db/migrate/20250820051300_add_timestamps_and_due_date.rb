@@ -17,10 +17,7 @@ class AddTimestampsAndDueDate < ActiveRecord::Migration[7.2]
         # -------- Backfill due_date ----------
         execute <<~SQL.squish
           UPDATE invoices
-          SET due_date = COALESCE(
-            DATE_ADD(invoiced_at, INTERVAL 15 DAY),
-            DATE_ADD(created_at,   INTERVAL 15 DAY)
-          )
+          SET due_date = DATE_ADD(created_at, INTERVAL 15 DAY);
         SQL
 
         change_column_null :invoices, :due_date, false

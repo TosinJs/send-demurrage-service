@@ -63,11 +63,13 @@ RSpec.describe BillOfLading, type: :model do
 
   describe 'scopes' do
     describe '.overdue_today' do
-      let!(:overdue) { create(:bill_of_lading, arrival_date: 5.days.ago, free_time_days: 3) }
-      let!(:fresh)   { create(:bill_of_lading, arrival_date: 1.day.ago, free_time_days: 5) }
+      # BL with due_date == today should be returned
+      let!(:overdue) { create(:bill_of_lading, arrival_date: Date.current - 3.days, free_time_days: 3) }
+      # Due date in the future should not be returned
+      let!(:fresh)   { create(:bill_of_lading, arrival_date: Date.current - 1.day, free_time_days: 5) }
       let!(:ignored) { create(:bill_of_lading, arrival_date: 1.day.ago, free_time_days: nil) }
 
-      it 'returns BLs where arrival_date + free_time_days is today or in the past' do
+      it 'returns BLs where arrival_date + free_time_days equals today' do
         result = described_class.overdue_today
 
         expect(result).to include(overdue)

@@ -13,7 +13,6 @@ RSpec.describe Invoice, type: :model do
     it { is_expected.to validate_presence_of(:reference) }
     it { is_expected.to validate_presence_of(:bill_of_lading_number) }
     it { is_expected.to validate_presence_of(:status) }
-    it { is_expected.to validate_presence_of(:invoiced_at) }
   end
 
   describe 'scopes' do

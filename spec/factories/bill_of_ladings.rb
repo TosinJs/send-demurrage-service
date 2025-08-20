@@ -16,8 +16,9 @@ FactoryBot.define do
     containers_20ft_special_count { 0 }
     containers_40ft_special_count { 0 }
 
-    trait :overdue do
-      arrival_date { Date.current - free_time_days.days - 1.day }
+    trait :overdue_today do
+      # Sets arrival_date so that arrival_date + free_time_days == today
+      arrival_date { Date.current - free_time_days.days }
     end
   end
 end

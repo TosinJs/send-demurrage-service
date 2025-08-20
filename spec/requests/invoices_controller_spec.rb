@@ -10,14 +10,14 @@ RSpec.describe "InvoicesController", type: :request do
       create(
         :invoice,
         due_date: 1.day.ago.to_date,
-        status: "open"
+        status: "init"
       )
     end
     let!(:future_invoice) do
       create(
         :invoice,
         due_date: 2.days.from_now.to_date,
-        status: "open"
+        status: "pending"
       )
     end
 
@@ -40,10 +40,10 @@ RSpec.describe "InvoicesController", type: :request do
 
   describe "POST /invoices/generate" do
     context "when there are overdue bills of lading" do
-      let!(:overdue_bl) do
+      let!(:overdue_bl) do  
         create(
-          :bill_of_lading,
-          :overdue,
+          :bill_of_lading,  
+          :overdue_today,
           containers_20ft_dry_count: 2,
           containers_40ft_dry_count: 1
         )

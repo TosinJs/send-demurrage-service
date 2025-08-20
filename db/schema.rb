@@ -16,7 +16,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_20_052400) do
     t.datetime "date_upload"
     t.string "number", limit: 9, null: false
     t.bigint "customer_id"
-    t.string "arrival_date"
+    t.datetime "arrival_date"
     t.integer "free_time_days"
     t.integer "containers_20ft_dry_count"
     t.integer "containers_40ft_dry_count"
@@ -47,7 +47,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_20_052400) do
     t.decimal "amount", precision: 12, null: false
     t.string "currency", limit: 6, default: "XOF"
     t.string "status", limit: 10, default: "init", null: false
-    t.datetime "invoiced_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at"
     t.date "due_date", null: false

@@ -6,7 +6,7 @@ class ImportLegacySchema < ActiveRecord::Migration[7.2]
       t.datetime :date_upload
       t.string   :numero_bl, limit: 9, null: false
       t.bigint   :id_client
-      t.string   :arrival_date
+      t.datetime :arrival_date
       t.integer  :freetime
 
 
@@ -41,7 +41,6 @@ class ImportLegacySchema < ActiveRecord::Migration[7.2]
       t.decimal  :montant_facture, precision: 12, scale: 0, null: false
       t.string   :devise, limit: 6, default: 'XOF'
       t.string   :statut, limit: 10, null: false, default: 'init'
-      t.datetime :date_facture, null: false
       t.datetime :created_at, null: false
       t.datetime :updated_at
     end
