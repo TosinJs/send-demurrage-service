@@ -1,12 +1,15 @@
 class AddTimestampsAndDueDate < ActiveRecord::Migration[7.2]
   def change
     # ------------- Timestamps ----------------
-    add_timestamps :bill_of_ladings,  null: true unless column_exists?(:bill_of_ladings, :created_at)
-    add_timestamps :customers,        null: true unless column_exists?(:customers, :created_at)
-    add_timestamps :refund_requests,  null: true unless column_exists?(:refund_requests, :created_at)
-
-    unless column_exists?(:invoices, :created_at)
-      add_timestamps :invoices, null: true
+    %w[
+      bill_of_ladings
+      customers
+      refund_requests
+      invoices
+    ].each do |table|
+      unless column_exists?(table.to_sym, :created_at) && column_exists?(table.to_sym, :updated_at)
+        add_timestamps table.to_sym, null: true
+      end
     end
 
     # ------------- due_date ------------------

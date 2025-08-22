@@ -28,7 +28,7 @@ module Demurrage
       created_invoices
     end
 
-    private_class_method
+    private_class_method :create_invoice_for
 
     def self.create_invoice_for(bill_of_lading)
       amount = bill_of_lading.containers_total * DEMURRAGE_RATE_USD
